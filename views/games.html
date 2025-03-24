@@ -6,6 +6,10 @@
     <title>Games</title>
 </head>
 <body>
+
+    {% extends 'base.html' %}
+    {% block content %}
+
     <h2>Esta é a pagina de Games</h2>
     <hr>
     {# Comentário no jinja2 #}
@@ -21,5 +25,17 @@
             <li>{{j}}</li>
             {% endfor %}
     </ol>
+
+    <hr>
+    <h4>Entrar no Jogo</h4>
+    
+    <form action = "{{url_for('games')}}", method = "POST">
+        <label for="jogador">Jogador:</label>
+        <input type="text" name="jogador">
+        <input type="submit" value="Entrar">
+    </form>
+
+    {% endblock content %}
+
 </body>
 </html>
