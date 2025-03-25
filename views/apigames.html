@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Games</title>
+</head>
+<body>
+    {% extends 'base.html' %}
+    {% block content %}
+
+        <div class="container" style="background-color: #f0f0f0; border-radius: 8px;">
+            <div class="row">
+                {% for g in gamesjson %}
+                    <div class="col-md-3 m-auto">
+                        <div class="card" style="width: 16rem;">
+                            <img src="{{g.thumbnail}}">
+                            <div class="card-body">
+                                <h5>{{g.title}}</h5>
+                                <p>{{g.genre}}</p>
+                                <p>{{g.platform}}</p>
+                                <a href="#" class="btn btn-dark">+ Info</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    {% endblock content %}
+</body>
+</html>
