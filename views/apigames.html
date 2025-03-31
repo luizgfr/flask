@@ -19,7 +19,7 @@
                                 <h5>{{g.title}}</h5>
                                 <p>{{g.genre}}</p>
                                 <p>{{g.platform}}</p>
-                                <a href="#" class="btn btn-dark">+ Info</a>
+                                <a href="{{url_for('apigames', id=g.id)}}" class="btn btn-dark">+ Info</a>
                             </div>
                         </div>
                     </div>
