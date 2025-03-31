@@ -10,7 +10,24 @@
 
     <header>
         <h1 style="text-align: center;">The Games</h1>
-        <hr>
+        <nav>
+            <div>
+                <span style="margin-left: auto;">
+                    <ul class="navbar-nav">
+                        {% if 'user_id' not in session: %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('login')}}">Login</a>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('logout')}}">Logout</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </span>
+            </div>
+        </nav>
+            <hr>
     </header>
     
     {% block content %}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+            {{ message }}
+            </div>
+        {% endfor %}
+    {% endwith %}
+
+    {% extends 'base.html' %}
+    {% block content %}
+    <div class="container col-4">
+        <div class="card mt-4"> 
+            <div class="card-body m-auto">
+                <form action="{{url_for('login')}}" method="post">
+                    <label for="email">E-mail:</label>
+                    <input class="form-control" name="email" type="email" placeholder="email@exemplo.com"><br>
+                    <label for="password">Senha:</label>
+                    <input class="form-control" name="password" type="password" placeholder="Insira sua senha"><br>
+                    <button type="submit" class="btn btn-danger btn-block">Entrar</button>
+                </form>
+                <hr>
+                <h6>Não possui conta? <a href="{{url_for('caduser')}}">Cadastre-se</a></h6>
+            </div>
+        </div>
+    </div>
+    {% endblock content %}
+    
+</body>
+</html>

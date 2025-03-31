@@ -1,13 +1,27 @@
 import urllib.request
-from flask import render_template, request, url_for, redirect
+from flask import render_template, request, url_for, redirect, flash, session
+from markupsafe import Markup
 import urllib
 import json
-from models.database import db, Game
+from models.database import db, Game, Usuario
+from werkzeug.security import generate_password_hash, check_password_hash
 
 jogadores = []
 gamelist = [{'Título' : 'CS-GO', 'Ano' : 2012, 'Categoria' : 'FPS Online'}]
 
 def init_app(app):
+    
+    #Função de middleware para verificar a autenticação do usuário
+    @app.before_request
+    def check_auth():
+        # Rotas que não precisam de autenticação
+        routes = ['login', 'caduser', 'home']
+        # Se a rota atual não requer autenticação, permite o acesso
+        if request.endpoint in routes or request.path.startswith('/static/'):
+            return
+        # Se o usuário não estiver autenticado, redireciona para a página de login
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
     
     @app.route('/') #decorator atribuindo a função home() a rota principal ('/')
     def home():
@@ -74,6 +88,46 @@ def init_app(app):
             db.session.commit()
             return redirect(url_for('estoque'))
         return render_template('editgame.html', g=g)
+    
+    @app.route('/login', methods=['GET', 'POST'])
+    def login():
+        if request.method == 'POST':
+            email = request.form['email']
+            password = request.form['password']
+            user = Usuario.query.filter_by(email=email).first()
+            if user and check_password_hash(user.password, password):
+                session['user_id'] = user.id
+                session['email'] = user.email
+                nickname = user.email.split('@')
+                flash(f'Login bem-sucedido! Bem-vindo {nickname[0]}!', 'success')
+                return redirect(url_for('home'))
+            else:
+                flash('Falha no login. Verifique seu nome de usuário e senha.', 'danger')
+        return render_template('login.html')
+    
+    @app.route('/logout', methods=['GET', 'POST'])
+    def logout():
+        session.clear()
+        return redirect(url_for('home'))
+        
+    @app.route('/caduser', methods=['GET', 'POST'])
+    def caduser():
+        if request.method == 'POST':
+            email = request.form['email']
+            password = request.form['password']
+            user = Usuario.query.filter_by(email=email).first()
+            if user:
+                msg = Markup("Usuário já cadastrado. Faça<a href='/login'>login.</a>")
+                flash(msg, 'danger')
+                return redirect(url_for('caduser'))
+            else:
+                hashed_password = generate_password_hash(password, method='scrypt')
+                new_user = Usuario(email=email, password=hashed_password)
+                db.session.add(new_user)
+                db.session.commit()
+                flash('Registro realizado com sucesso! Faça o login.', 'success')
+                return redirect(url_for('login'))
+        return render_template('caduser.html')
 
     
     @app.route('/apigames', methods=['GET', 'POST'])
