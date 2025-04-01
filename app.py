@@ -29,5 +29,5 @@ if __name__ == '__main__':
     with app.test_request_context():
         db.create_all()
 
-    app.run(host = 'localhost', port = 4000, debug = True) #modo debug serve para a aplicação ficar sempre atualizada no desenv.
+    app.run(host = 'localhost', port = 40000, debug = True) #modo debug serve para a aplicação ficar sempre atualizada no desenv.
 
