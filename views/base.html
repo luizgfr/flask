@@ -23,6 +23,20 @@
                             <a class="nav-link" href="{{url_for('logout')}}">Logout</a>
                         </li>
                         {% endif %}
+                        
+                        <br>
+
+                        <li class="nav-item">
+                            <a href="{{ url_for('home') }}" class="btn btn-primary">Home</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ url_for('estoque') }}" class="btn btn-primary">Cadastro de Jogos</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ url_for('apigames') }}" class="btn btn-primary">Lista de Jogos</a>
+                        </li>
                     </ul>
                 </span>
             </div>
